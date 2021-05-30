@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEWS API</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="script.js"></script>
+	<script>
+		var about = "india";
+var allarticles;
+
+
+function atag(x) {
+    about = x.name;
+    document.getElementById('headlines').innerHTML = "";
+    var container = document.querySelector("#headlines");
+    let img = document.createElement("img");
+    img.setAttribute('src', "bottlegif.gif");
+    img.setAttribute('id', 'gif');
+    container.appendChild(img);
+    document.getElementById('test').value = about;
+    onstart();
+}
+
+function myfun(x) {
+    x.classList.toggle("fa-thumbs-down");
+}
+
+function myfun1(x) {
+    x.classList.toggle("fa-bookmarked");
+}
+
+$(document).ready(function() {
+
+    document.querySelector('#test').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            $('#btn').trigger('click');
+        }
+    });
+
+
+});
+
+
+$(document).ready(function() {
+    $("button").click(function() {
+
+        about = $("#test").val();
+        var correctedabout;
+
+        var regex = /^[A-Za-z0-9 ]+$/;
+        var isValid = regex.test(about);
+        var correctedabout = "india";
+        while (!isValid && correctedabout != "") {
+            correctedabout = prompt("Search contains Special Characters. Please enter a valid search!");
+            about = correctedabout;
+            isValid = regex.test(about);
+        }
+
+        if (correctedabout == "")
+            about = 'trending';
+        document.getElementById('test').value = about;
+        document.getElementById('headlines').innerHTML = "";
+        var container = document.querySelector("#headlines");
+        let img = document.createElement("img");
+        img.setAttribute('src', "bottlegif.gif");
+        img.setAttribute('id', 'gif');
+        container.appendChild(img);
+
+        onstart();
+    });
+});
+
+
+function onstart() {
+
+    console.log("clicked");
+    var container = document.querySelector("#headlines");
+    let img = document.createElement("img");
+    img.setAttribute('src', "bottlegif.gif");
+    img.setAttribute('id', 'gif');
+    container.appendChild(img);
+
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    let dateObj = new Date();
+    let month = monthNames[dateObj.getMonth()];
+    let day = String(dateObj.getDate()).padStart(2, '0');
+    let year = dateObj.getFullYear();
+    let output = month + '\n' + day + ',' + year;
+    document.getElementById('time').innerHTML = output;
+
+    $.get("http://newsapi.org/v2/everything?q=" + about.replace(" ", "%20") + "&from=" + dateObj + "&sortBy=publishedAt&apiKey=a3c592f84f9c45669716c5e774af8de0", function(matchdata) {
+        var k = 1;
+
+        allarticles = matchdata;
+        document.getElementById('headlines').innerHTML = "";
+        matchdata.articles.forEach(function(md) {
+            var auth = md.author;
+            var title = md.title;
+            var description = md.description;
+            var imgsrc = md.urlToImage;
+            var timestamp = md.publishedAt;
+            console.log(md.publishedAt);
+            var newtime = timestamp.split('T');
+            var dateformatted = newtime[0].split('-');
+            var cont = md.content;
+            var readurl = md.url;
+
+            let card = document.createElement("div");
+            card.setAttribute('id', 'card')
+
+            let span = document.createElement("span");
+            span.setAttribute('id', 'author')
+            let author = document.createTextNode(k + '. ' + auth + " - " + dateformatted[2] + " " + monthNames[dateformatted[1] - 1] + " " + dateformatted[0]);
+            span.appendChild(author);
+            card.appendChild(span);
+
+            let para = document.createElement("p");
+            para.setAttribute('id', 'para');
+            let article = document.createTextNode(title);
+            para.appendChild(article);
+            card.appendChild(para);
+
+            let img = document.createElement("img");
+            img.setAttribute('src', imgsrc);
+            img.setAttribute('id', 'image');
+            card.appendChild(img);
+
+            let descdiv = document.createElement("div");
+            descdiv.setAttribute('id', 'desc');
+            let desc = document.createTextNode(description);
+            descdiv.appendChild(desc);
+            card.appendChild(descdiv);
+
+            let contentdiv = document.createElement("div");
+            contentdiv.setAttribute('id', 'content');
+            let content = document.createTextNode(cont);
+            contentdiv.appendChild(content);
+            card.appendChild(contentdiv);
+
+            let a = document.createElement("a");
+            a.setAttribute('id', 'ReadFullArticle');
+            a.setAttribute('href', readurl);
+            let ref = document.createTextNode("Read More...");
+            a.appendChild(ref);
+            card.appendChild(a);
+
+            let icon = document.createElement("i");
+            icon.setAttribute('class', 'fa fa-thumbs-up fa-2x');
+            icon.setAttribute('onclick', 'myfun(this)');
+            card.appendChild(icon);
+
+            let icon2 = document.createElement("i");
+            icon2.setAttribute('class', 'fa fa-bookmark fa-2x');
+            icon2.setAttribute('onclick', 'myfun1(this)');
+            icon2.setAttribute('id', 'bookmark');
+            card.appendChild(icon2);
+
+            var container = document.querySelector("#headlines");
+            container.appendChild(card);
+            k++;
+        });
+    });
+}
+	
+	</script>
+	<style> 
+	* {
+    font-family: Helvetica;
+}
+
+header {
+    background-color: rgb(4, 35, 61);
+    width: 100%;
+}
+
+#logo {
+    height: 60px;
+    width: 140px;
+    margin-left: 200px;
+    display: inline-block;
+    position: relative;
+    top: 20px;
+}
+
+h1 {
+    z-index: 1;
+    display: inline-block;
+    position: relative;
+    left: 10px;
+    color: rgb(245, 231, 33);
+    font-size: 35px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+
+#test {
+    position: relative;
+    top: 68px;
+    width: 260px;
+    font-size: 20px;
+    border: 4px solid rgb(238, 222, 0);
+    border-radius: 5px;
+    padding: 3px;
+    margin-left: 7px;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+#test:hover {
+    border: 4px solid rgb(4, 35, 61);
+}
+
+button {
+    border: 4px solid rgb(238, 222, 0);
+    border-radius: 5px;
+    height: 35px;
+    width: 40px;
+    color: rgb(4, 35, 61);
+    font-weight: bold;
+    background-color: white;
+    position: relative;
+    top: 69px;
+    margin-left: 7px;
+}
+
+#card {
+    width: 1180px;
+    padding: 10px;
+    margin: 5px 5px 20px 5px;
+    border-radius: 8px;
+    box-shadow: 5px 5px 5px rgb(155, 150, 150);
+    transition-property: box-shadow;
+    transition-duration: 3s;
+    transition-property: background-image;
+    transition-duration: 3s;
+}
+
+#card:first-child {
+    margin-top: 25px;
+}
+
+#card:hover {
+    background-image: linear-gradient(to right, rgb(255, 255, 255), rgb(213, 219, 223));
+}
+
+#author {
+    color: rgb(75, 70, 70);
+}
+
+#para {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#image {
+    height: 100px;
+    width: 100px;
+    display: inline-block;
+    border: 2px solid rgb(4, 35, 61);
+    border-radius: 9px;
+}
+
+#desc {
+    display: inline-block;
+    width: 1030px;
+    font-size: 18px;
+    margin: 5px;
+}
+
+#content {
+    width: 1130px;
+    padding: 5px;
+}
+
+#gif {
+    margin-top: 70px;
+    margin-left: 350px;
+    width: 700px;
+    height: 540px;
+}
+
+#headlines {
+    display: inline-block;
+    width: 1230px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#suggestions {
+    display: inline-block;
+    width: 257px;
+    position: fixed;
+    margin-top: 10px;
+    margin-left: 10px;
+    padding-left: 5px;
+    line-height: 1.6;
+    background-color: rgb(4, 35, 61);
+}
+
+a {
+    display: block;
+    margin: 5px;
+    color: rgb(238, 227, 73);
+    font-weight: bold;
+    font-size: 17px;
+    text-decoration: none;
+}
+
+a:hover {
+    color: rgb(0, 217, 255);
+}
+
+#ReadFullArticle {
+    color: rgb(4, 35, 61);
+    display: inline-block;
+    width: 150px;
+}
+
+.fa-thumbs-up {
+    color: rgb(4, 35, 61);
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 4px;
+}
+
+.fa-thumbs-up:hover {
+    background-color: rgb(4, 35, 61);
+    color: white;
+}
+
+.fa-thumbs-down {
+    color: brown;
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 4px;
+}
+
+.fa-thumbs-down:hover {
+    background-color: brown;
+    color: white;
+}
+
+.fa-bookmark {
+    color: rgb(143, 147, 151);
+    margin-left: 20px;
+    padding: 4px;
+}
+
+.fa-bookmarked {
+    color: rgb(4, 35, 61);
+    margin-left: 20px;
+    padding: 4px;
+}
+
+#time {
+    color: rgb(238, 227, 73);
+    font-size: 18px;
+    margin: 5px;
+    font-weight: bold;
+}
+
+
+/* login page css*/
+	
+	</style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body onload="onstart()" id="headd">
+
+    <header>
+
+        <p id="inp" style="float:left"></p><input style="float:left" placeholder="Search" type="text" id="test" value=""></p>
+        <button style="float: left" id="btn"><i class="fa fa-search" aria-hidden="true"></i></button>
+        <img src="logo1.PNG" id="logo">
+        <h1>WORLD BULLETIN</h1>
+    </header>
+
+
+
+    <div id="headlines"></div>
+    <div id="suggestions">
+        <p id="time"></p>
+        <br>
+        <a href=# id="trending" name="trending" onclick="atag(this)">TRENDING</a>
+        <a href=# id="sports" name="sports" onclick="atag(this)">SPORTS</a>
+        <a href=# id="covid-19" name="covid-19" onclick="atag(this)">COVID-19</a>
+        <a href=# id="india" name="india" onclick="atag(this)">INDIA</a>
+        <a href=# id="joe biden" name="joe biden" onclick="atag(this)">JOE BIDEN</a>
+        <a href=# id="stock" name="stock market" onclick="atag(this)">STOCK MARKET</a>
+        <a href=# id="politics" name="indian politics" onclick="atag(this)">INDIAN POLITICS</a>
+        <a href=# id="cricket" name="cricket" onclick="atag(this)">CRICKET</a>
+        <a href=# id="bollywood" name="bollywood" onclick="atag(this)">BOLLYWOOD</a>
+        <a href=# id="technology" name="technology" onclick="atag(this)">TECHNOLOGY</a>
+        <a href=# id="ipl" name="ipl" onclick="atag(this)">IPL</a>
+        <a href=# id="health" name="health" onclick="atag(this)">HEALTH</a>
+        <a href=# id="automobiles" name="automobiles" onclick="atag(this)">AUTOMOBILES</a>
+        <a href=# id="lifestyle" name="lifestyle" onclick="atag(this)">LIFESTYLE</a>
+        <a href=# id="education" name="education" onclick="atag(this)">EDUCATION</a>
+        <a href=# id="jobs" name="jobs" onclick="atag(this)">JOBS</a>
+        <a href="#headd"><i class="fa fa-arrow-up"></i></a>
+    </div>
+
+
+
+</body>
+
+</html>
