@@ -48,8 +48,13 @@ app.post('/news' , function(req , res )
 	   {
 	var credentials = {
     "admin": "12345",
-    "Dhiraj" : "dhiraj",
-    "Adarsh" : "adarsh"
+    "STQA": "selenium",
+    "varun": "203",
+    "sanskruti": "205",
+    "vaishali": "256",
+    "vedant": "270", 
+    "dhiraj" : "265"
+    "adarsh" : "275"
 	}
 
     var username = req.body.name ;
