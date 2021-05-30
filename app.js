@@ -28,9 +28,7 @@ app.use(session({
   
 app.use(flash()); 
 
-
-//======================Routes =============================================//
-
+//======================Routes =============================================/
 
 app.get('/' , function(req , res )
 	   {
@@ -53,7 +51,7 @@ app.post('/news' , function(req , res )
     "sanskruti": "205",
     "vaishali": "256",
     "vedant": "270", 
-    "dhiraj" : "265"
+    "dhiraj" : "265", 
     "adarsh" : "275"
 	}
 
