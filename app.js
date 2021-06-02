@@ -157,7 +157,7 @@ app.post('/login' , passport.authenticate("local" , {
 
 
 
-app.listen(3000 , function(){
+app.listen(process.env.PORT , process.env.IP , function(){
 	console.log("Hey Server is connected") ;
 	
 });
