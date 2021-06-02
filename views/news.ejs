@@ -9,7 +9,7 @@
     <script src="script.js"></script>
 	<script>
 		var about = "india";
-var allarticles;
+var allarticles;3
 
 
 function atag(x) {
@@ -93,7 +93,7 @@ function onstart() {
     let output = month + '\n' + day + ',' + year;
     document.getElementById('time').innerHTML = output;
 
-    $.get("http://newsapi.org/v2/everything?q=" + about.replace(" ", "%20") + "&from=" + dateObj + "&sortBy=publishedAt&apiKey=a3c592f84f9c45669716c5e774af8de0", function(matchdata) {
+    $.get("http://newsapi.org/v2/everything?q=" + about.replace(" ", "%20") + "&from=" + dateObj + "&sortBy=publishedAt&apiKey=8dc42ab41ea84199bab843a9b49d935e", function(matchdata) {
         var k = 1;
 
         allarticles = matchdata;
